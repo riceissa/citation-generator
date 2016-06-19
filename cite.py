@@ -9,11 +9,12 @@ from bs4 import BeautifulSoup
 from tld import get_tld
 import dateparser
 
-def soup2dict(soup, dictionary):
+def soup2dict(soup, dictionary, url=""):
     """
     Extract info from BeautifulSoup soup into a dictionary.  Return a modified
     dictionary.
     """
+    domain = get_tld(url)
     meta = soup.find_all("meta")
     for tag in meta:
         if tag.get("property") == "og:title":
@@ -66,7 +67,7 @@ def soup2dict(soup, dictionary):
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
-    if "author" not in dictionary:
+    if "author" not in dictionary or domain == "latimes.com":
         author_candidates = []
         author_candidates.extend(soup.find_all("span", itemprop="author"))
         author_candidates.extend(soup.find_all("div", class_="author"))
@@ -187,5 +188,5 @@ def get_cite_web(dictionary, url=""):
 if __name__ == "__main__":
     soup = BeautifulSoup(sys.stdin, "html.parser")
     d = dict()
-    soup2dict(soup, d)
+    soup2dict(soup, d, sys.argv[1])
     print(get_cite_web(d, sys.argv[1]), end="")
