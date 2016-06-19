@@ -8,12 +8,20 @@ def soup2dict(soup, dictionary):
     Extract info from BeautifulSoup soup into a dictionary.  Return a modified
     dictionary.
     """
-    m = soup.find_all("meta")
-    for i in m:
-        if i.get("property") is not None and "og:" in i.get("property"):
-            print(i)
-    if "title" not in dictionary:
-        dictionary["title"] = soup.title.string
+    meta = soup.find_all("meta")
+    for tag in meta:
+        if tag.get("property") == "og:title":
+            dictionary["title"] = tag.get("content").strip()
+        elif tag.get("name") == "title":
+            dictionary["title"] = tag.get("content").strip()
+        elif tag.get("name") == "author":
+            dictionary["author"] = tag.get("content").strip()
+        elif tag.get("name") == "dat":
+            dictionary["date"] = tag.get("content").strip()
+        elif tag.get("name") == "cre":
+            dictionary["publisher"] = tag.get("content").strip()
+    if "title" not in dictionary and soup.title is not None:
+        dictionary["title"] = soup.title.string.strip()
 
 def get_author(soup):
     return "hi"
