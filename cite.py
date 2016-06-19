@@ -45,27 +45,30 @@ def soup2dict(soup, dictionary):
         author_candidates = []
         author_candidates.extend(soup.find_all("div", class_="author"))
         author_candidates.extend(soup.find_all("span", class_="author"))
-        print(author_candidates)
+        #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
 
 def get_author(dictionary):
-    return dictionary.get("author").strip()
+    if "author" in dictionary:
+        return dictionary.get("author").strip()
 
 def get_date(dictionary):
-    date_str = dictionary.get("date").strip()
-    date = dateparser.parse(date_str)
-    if not date:
-        # dateparser does not like dates that look like
-        # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
-        # and try again
-        date = dateparser.parse(date_str[:4])
-    if not date:
-        return date_str
-    return date.strftime("%B %-d, %Y")
+    if "date" in dictionary:
+        date_str = dictionary.get("date").strip()
+        date = dateparser.parse(date_str)
+        if not date:
+            # dateparser does not like dates that look like
+            # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
+            # and try again
+            date = dateparser.parse(date_str[:4])
+        if not date:
+            return date_str
+        return date.strftime("%B %-d, %Y")
 
 def get_title(dictionary):
-    return dictionary.get("title").strip()
+    if "title" in dictionary:
+        return dictionary.get("title").strip()
 
 publisher_map = {
         "huffingtonpost.com": "The Huffington Post",
@@ -90,7 +93,7 @@ publisher_map = {
 def get_publisher(dictionary, url):
     if get_tld(url) in publisher_map:
         return publisher_map[get_tld(url)]
-    else:
+    elif "publisher" in dictionary:
         return dictionary.get("publisher").strip()
 
 def get_cite_web(dictionary, url=""):
