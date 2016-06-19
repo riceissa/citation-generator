@@ -51,7 +51,10 @@ def soup2dict(soup, dictionary):
         date_candidates.extend(soup.find_all("span", class_="date"))
         date_candidates.extend(soup.find_all("span", class_="time"))
         date_candidates.extend(soup.find_all("div", class_="time"))
-        date_candidates.extend(soup.find_all("time", class_="timestamp_article"))
+        date_candidates.extend(soup.find_all("time",
+            class_="timestamp_article"))
+        date_candidates.extend(soup.find_all("time",
+            class_="trb_ar_dateline_time"))
         date_candidates.extend(soup.find_all("p", class_="date"))
         #print(date_candidates)
         if date_candidates:
@@ -65,6 +68,7 @@ def soup2dict(soup, dictionary):
 
     if "author" not in dictionary:
         author_candidates = []
+        author_candidates.extend(soup.find_all("span", itemprop="author"))
         author_candidates.extend(soup.find_all("div", class_="author"))
         author_candidates.extend(soup.find_all("span", class_="author"))
         author_candidates.extend(soup.find_all("span",
