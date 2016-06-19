@@ -45,6 +45,8 @@ def soup2dict(soup, dictionary):
         author_candidates = []
         author_candidates.extend(soup.find_all("div", class_="author"))
         author_candidates.extend(soup.find_all("span", class_="author"))
+        author_candidates.extend(soup.find_all("p", class_="author"))
+        author_candidates.extend(soup.find_all("p", class_="byline"))
         #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
@@ -97,6 +99,7 @@ publisher_map = {
         "independent.co.uk": "The Independent",
         "theregister.co.uk": "The Register",
         "nybooks.com": "The New York Review of Books",
+        "who.int": "World Health Organization",
     }
 
 def get_publisher(dictionary, url):
