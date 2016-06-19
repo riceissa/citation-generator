@@ -3,6 +3,7 @@
 import sys
 from bs4 import BeautifulSoup
 import re
+from tld import get_tld
 
 def soup2dict(soup, dictionary):
     """
@@ -27,10 +28,10 @@ def soup2dict(soup, dictionary):
     #print(soup.find_all("span", class_="date")[0].contents)
     s = soup.get_text()
     m = re.search(r'By (\w* \w*)', s)
-    if "author" not in dictionary:
+    if "author" not in dictionary and m is not None:
         dictionary["author"] = m.group(1)
-    m = re.search(r'(June) \d+, \d+', s)
-    if "date" not in dictionary:
+    m = re.search(r'(January|February|March|May|June|July|August|September|October|November|December) \d+, \d+', s)
+    if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
 def get_author(dictionary):
@@ -42,15 +43,29 @@ def get_date(dictionary):
 def get_title(dictionary):
     return dictionary.get("title")
 
+publisher_map = {
+        "huffingtonpost.com": "The Huffington Post",
+        "lesswrong.com": "LessWrong",
+        }
+
+def get_publisher(dictionary, url):
+    if get_tld(url) in publisher_map:
+        return publisher_map[get_tld(url)]
+    else:
+        return dictionary.get("publisher")
+
 def get_cite_web(dictionary, url=""):
     result = "{{cite web "
     result += "|url=" + url + " "
     date = get_date(dictionary)
     title = get_title(dictionary)
+    publisher = get_publisher(dictionary, url)
     if date:
         result += "|date=" + date + " "
     if title:
         result += "|title=" + title + " "
+    if publisher:
+        result += "|publisher=" + publisher + " "
     result = result.strip()
     result += "}}"
     return result
