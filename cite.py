@@ -50,7 +50,7 @@ def soup2dict(soup, dictionary):
         #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
-    m = re.search(r'By (\w* \w*)', s)
+    m = re.search(r'[Bb]y (\b([A-Z]{1}[a-z]+) ([A-Z]{1}[a-z]+)\b)', s)
     if "author" not in dictionary and m is not None:
         dictionary["author"] = m.group(1)
 
