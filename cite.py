@@ -34,9 +34,6 @@ def soup2dict(soup, dictionary):
     #print(soup.find_all("span", class_="author")[0].contents)
     #print(soup.find_all("span", class_="date")[0].contents)
     s = soup.get_text()
-    m = re.search(r'By (\w* \w*)', s)
-    if "author" not in dictionary and m is not None:
-        dictionary["author"] = m.group(1)
 
     m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December) \d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s)
     if "date" not in dictionary and m is not None:
@@ -49,10 +46,15 @@ def soup2dict(soup, dictionary):
         #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
+    m = re.search(r'By (\w* \w*)', s)
+    if "author" not in dictionary and m is not None:
+        dictionary["author"] = m.group(1)
 
 def get_author(dictionary):
     if "author" in dictionary:
-        return dictionary.get("author").strip()
+        result = dictionary.get("author").strip()
+        result = result.replace("\n", "")
+        return result
 
 def get_date(dictionary):
     if "date" in dictionary:
