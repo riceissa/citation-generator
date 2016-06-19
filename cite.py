@@ -39,7 +39,18 @@ def soup2dict(soup, dictionary):
     #print(soup.find_all("span", class_="date")[0].contents)
     s = soup.get_text()
 
-    m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December) \d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s)
+    if "date" not in dictionary:
+        print("got here")
+        date_candidates = []
+        date_candidates.extend(soup.find_all("div", class_="date"))
+        date_candidates.extend(soup.find_all("div", class_="dateline"))
+        date_candidates.extend(soup.find_all("span", class_="date"))
+        date_candidates.extend(soup.find_all("p", class_="date"))
+        print(date_candidates)
+        if date_candidates:
+            dictionary["date"] = date_candidates[0].get_text()
+
+    m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December)  ?\d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s, re.IGNORECASE)
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
@@ -104,6 +115,7 @@ publisher_map = {
         "nybooks.com": "The New York Review of Books",
         "who.int": "World Health Organization",
         "givewell.org": "GiveWell",
+        "econlog.econlib.org": "EconLog",
         "press.princeton.edu": "Princeton University Press",
         "princeton.edu": "Princeton University",
     }
@@ -124,7 +136,7 @@ def get_cite_web(dictionary, url=""):
     date = get_date(dictionary)
     title = get_title(dictionary)
     publisher = get_publisher(dictionary, url)
-    if title.endswith(" - " + publisher):
+    if publisher and title.endswith(" - " + publisher):
         title = title[:-len(" - " + publisher)]
     if author:
         result += "|author=" + author + " "
