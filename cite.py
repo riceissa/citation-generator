@@ -76,7 +76,7 @@ def get_date(dictionary):
 
 def get_title(dictionary):
     if "title" in dictionary:
-        return dictionary.get("title").strip()
+        return dictionary.get("title").strip().replace("|", "-")
 
 publisher_map = {
         "huffingtonpost.com": "The Huffington Post",
