@@ -23,6 +23,8 @@ def soup2dict(soup, dictionary):
             dictionary["author"] = tag.get("content")
         elif tag.get("name") == "dat":
             dictionary["date"] = tag.get("content")
+        if tag.get("property") == "og:site_name":
+            dictionary["publisher"] = tag.get("content")
         elif tag.get("name") == "cre":
             dictionary["publisher"] = tag.get("content")
         elif tag.get("property") == "article:published_time":
@@ -94,6 +96,7 @@ publisher_map = {
         "theguardian.com": "The Guardian",
         "independent.co.uk": "The Independent",
         "theregister.co.uk": "The Register",
+        "nybooks.com": "The New York Review of Books",
     }
 
 def get_publisher(dictionary, url):
