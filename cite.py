@@ -97,7 +97,10 @@ def get_date(dictionary, url=""):
         return date.strftime("%B %-d, %Y")
     if url:
         m = re.search(r'(\d{4}/\d\d?/\d\d?|\d{4}-\d\d?-\d\d?)', url)
-        date_str = m.group(1)
+        if m is not None:
+            date_str = m.group(1)
+        else:
+            return ""
         try:
             date = parse(date_str)
         except ValueError:
