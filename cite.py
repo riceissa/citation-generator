@@ -6,6 +6,7 @@ import re
 from tld import get_tld
 import datetime
 import dateparser
+from dateutil.parser import parse
 
 def soup2dict(soup, dictionary):
     """
@@ -56,7 +57,10 @@ def get_author(dictionary):
 def get_date(dictionary):
     if "date" in dictionary:
         date_str = dictionary.get("date").strip()
-        date = dateparser.parse(date_str)
+        date = parse(date_str)
+        if not date:
+            # try parsing the date with a different library
+            date = dateparser.parse(date_str)
         if not date:
             # dateparser does not like dates that look like
             # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
