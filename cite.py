@@ -14,21 +14,21 @@ def soup2dict(soup, dictionary):
     meta = soup.find_all("meta")
     for tag in meta:
         if tag.get("property") == "og:title":
-            dictionary["title"] = tag.get("content").strip()
+            dictionary["title"] = tag.get("content")
         elif tag.get("name") == "title":
-            dictionary["title"] = tag.get("content").strip()
+            dictionary["title"] = tag.get("content")
         elif tag.get("name") == "author":
-            dictionary["author"] = tag.get("content").strip()
+            dictionary["author"] = tag.get("content")
         elif tag.get("name") == "dat":
-            dictionary["date"] = tag.get("content").strip()
+            dictionary["date"] = tag.get("content")
         elif tag.get("name") == "cre":
-            dictionary["publisher"] = tag.get("content").strip()
+            dictionary["publisher"] = tag.get("content")
         elif tag.get("property") == "article:modified_time":
-            dictionary["date"] = tag.get("content").strip()
+            dictionary["date"] = tag.get("content")
         elif tag.get("property") == "article:published_time":
-            dictionary["date"] = tag.get("content").strip()
+            dictionary["date"] = tag.get("content")
     if "title" not in dictionary and soup.title is not None:
-        dictionary["title"] = soup.title.string.strip()
+        dictionary["title"] = soup.title.string
     #print(soup.find_all("span", class_="author")[0].contents)
     #print(soup.find_all("span", class_="date")[0].contents)
     s = soup.get_text()
@@ -48,13 +48,13 @@ def soup2dict(soup, dictionary):
             dictionary["author"] = author_candidates[0].get_text()
 
 def get_author(dictionary):
-    return dictionary.get("author")
+    return dictionary.get("author").strip()
 
 def get_date(dictionary):
-    return dictionary.get("date")
+    return dictionary.get("date").strip()
 
 def get_title(dictionary):
-    return dictionary.get("title")
+    return dictionary.get("title").strip()
 
 publisher_map = {
         "huffingtonpost.com": "The Huffington Post",
@@ -80,7 +80,7 @@ def get_publisher(dictionary, url):
     if get_tld(url) in publisher_map:
         return publisher_map[get_tld(url)]
     else:
-        return dictionary.get("publisher")
+        return dictionary.get("publisher").strip()
 
 def get_cite_web(dictionary, url=""):
     result = "<ref>{{cite web "
