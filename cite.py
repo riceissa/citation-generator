@@ -46,7 +46,22 @@ def get_title(dictionary):
 publisher_map = {
         "huffingtonpost.com": "The Huffington Post",
         "lesswrong.com": "LessWrong",
-        }
+        "nytimes.com": "The New York Times",
+        "huffingtonpost.ca": "Huffington Post Canada",
+        "washingtonpost.com": "The Washington Post",
+        "indiatimes.com": "The Times of India",
+        "bostonglobe.com": "The Boston Globe",
+        "mirror.co.uk": "Mirror",
+        "telegraph.co.uk": "The Telegraph",
+        "bloomberg.com": "Businessweek",
+        "ft.com": "Financial Times",
+        "economist.com": "The Economist",
+        "arstechnica.com": "Ars Technica",
+        "wsj.com": "The Wall Street Journal",
+        "theguardian.com": "The Guardian",
+        "independent.co.uk": "The Independent",
+        "theregister.co.uk": "The Register",
+    }
 
 def get_publisher(dictionary, url):
     if get_tld(url) in publisher_map:
