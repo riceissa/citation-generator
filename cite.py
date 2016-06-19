@@ -21,6 +21,8 @@ def soup2dict(soup, dictionary):
             dictionary["title"] = tag.get("content")
         elif tag.get("name") == "author":
             dictionary["author"] = tag.get("content")
+        elif tag.get("name") == "DCSext.author":
+            dictionary["author"] = tag.get("content")
         elif tag.get("name") == "dat":
             dictionary["date"] = tag.get("content")
         if tag.get("property") == "og:site_name":
@@ -47,6 +49,7 @@ def soup2dict(soup, dictionary):
         author_candidates.extend(soup.find_all("span", class_="author"))
         author_candidates.extend(soup.find_all("p", class_="author"))
         author_candidates.extend(soup.find_all("p", class_="byline"))
+        author_candidates.extend(soup.find_all("span", class_="byline__author-name"))
         #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
@@ -100,6 +103,7 @@ publisher_map = {
         "theregister.co.uk": "The Register",
         "nybooks.com": "The New York Review of Books",
         "who.int": "World Health Organization",
+        "givewell.org": "GiveWell",
     }
 
 def get_publisher(dictionary, url):
