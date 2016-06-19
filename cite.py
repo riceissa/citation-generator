@@ -107,4 +107,3 @@ if __name__ == "__main__":
     d = dict()
     soup2dict(soup, d)
     print(get_cite_web(d, sys.argv[1]))
-    print(d)
