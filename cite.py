@@ -152,6 +152,7 @@ publisher_map = {
         "press.princeton.edu": "Princeton University Press",
         "princeton.edu": "Princeton University",
         "usatoday.com": "USA Today",
+        "latimes.com": "''[[Los Angeles Times]]''",
     }
 
 def get_publisher(dictionary, url):
