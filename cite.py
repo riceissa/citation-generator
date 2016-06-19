@@ -82,7 +82,7 @@ def get_cite_web(dictionary, url=""):
         result += "|title=" + title + " "
     if publisher:
         result += "|publisher=" + publisher + " "
-    result += "|accessdate=" + datetime.date.today().strftime("%B %d, %Y")
+    result += "|accessdate=" + datetime.date.today().strftime("%B %-d, %Y")
     result = result.strip()
     result += "}}</ref>"
     return result
