@@ -48,6 +48,8 @@ def soup2dict(soup, dictionary):
         date_candidates.extend(soup.find_all("div", class_="date"))
         date_candidates.extend(soup.find_all("div", class_="dateline"))
         date_candidates.extend(soup.find_all("span", class_="date"))
+        date_candidates.extend(soup.find_all("span", class_="time"))
+        date_candidates.extend(soup.find_all("div", class_="time"))
         date_candidates.extend(soup.find_all("p", class_="date"))
         #print(date_candidates)
         if date_candidates:
