@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import re
 from tld import get_tld
 import datetime
+import dateparser
 
 def soup2dict(soup, dictionary):
     """
@@ -23,9 +24,9 @@ def soup2dict(soup, dictionary):
             dictionary["date"] = tag.get("content")
         elif tag.get("name") == "cre":
             dictionary["publisher"] = tag.get("content")
-        elif tag.get("property") == "article:modified_time":
-            dictionary["date"] = tag.get("content")
         elif tag.get("property") == "article:published_time":
+            dictionary["date"] = tag.get("content")
+        elif tag.get("property") == "article:modified_time" and "date" not in dictionary:
             dictionary["date"] = tag.get("content")
     if "title" not in dictionary and soup.title is not None:
         dictionary["title"] = soup.title.string
@@ -44,6 +45,7 @@ def soup2dict(soup, dictionary):
         author_candidates = []
         author_candidates.extend(soup.find_all("div", class_="author"))
         author_candidates.extend(soup.find_all("span", class_="author"))
+        print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
 
@@ -51,7 +53,16 @@ def get_author(dictionary):
     return dictionary.get("author").strip()
 
 def get_date(dictionary):
-    return dictionary.get("date").strip()
+    date_str = dictionary.get("date").strip()
+    date = dateparser.parse(date_str)
+    if not date:
+        # dateparser does not like dates that look like
+        # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
+        # and try again
+        date = dateparser.parse(date_str[:4])
+    if not date:
+        return date_str
+    return date.strftime("%B %-d, %Y")
 
 def get_title(dictionary):
     return dictionary.get("title").strip()
