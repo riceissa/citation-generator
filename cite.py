@@ -70,7 +70,7 @@ def get_publisher(dictionary, url):
         return dictionary.get("publisher")
 
 def get_cite_web(dictionary, url=""):
-    result = "{{cite web "
+    result = "<ref>{{cite web "
     result += "|url=" + url + " "
     date = get_date(dictionary)
     title = get_title(dictionary)
@@ -82,7 +82,7 @@ def get_cite_web(dictionary, url=""):
     if publisher:
         result += "|publisher=" + publisher + " "
     result = result.strip()
-    result += "}}"
+    result += "}}</ref>"
     return result
 
 if __name__ == "__main__":
