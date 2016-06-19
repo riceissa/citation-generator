@@ -34,7 +34,8 @@ def soup2dict(soup, dictionary):
             dictionary["publisher"] = tag.get("content")
         elif tag.get("property") == "article:published_time":
             dictionary["date"] = tag.get("content")
-        elif tag.get("property") == "article:modified_time" and "date" not in dictionary:
+        elif tag.get("property") == "article:modified_time" and ("date" not in
+                dictionary):
             dictionary["date"] = tag.get("content")
     if "title" not in dictionary and soup.title is not None:
         dictionary["title"] = soup.title.string
@@ -53,7 +54,8 @@ def soup2dict(soup, dictionary):
             dictionary["date"] = date_candidates[0].get_text()
 
     months = "(Jan(uary)?|Feb(ruary)?|Mar(ch)?|May|June?|July?|Aug(ust)?|Sept?(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)"
-    m = re.search(r'({months}\.?  ?\d+, \d+|\d+ {months} \d+)'.format(months=months), s, re.IGNORECASE)
+    m = re.search(r'({months}\.?  ?\d+, \d+|\d+ {months} \d+)'.format(
+        months=months), s, re.IGNORECASE)
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
@@ -61,11 +63,13 @@ def soup2dict(soup, dictionary):
         author_candidates = []
         author_candidates.extend(soup.find_all("div", class_="author"))
         author_candidates.extend(soup.find_all("span", class_="author"))
-        author_candidates.extend(soup.find_all("span", class_="author-card__details__name"))
+        author_candidates.extend(soup.find_all("span",
+            class_="author-card__details__name"))
         author_candidates.extend(soup.find_all("p", class_="author"))
         author_candidates.extend(soup.find_all("p", class_="byline"))
         author_candidates.extend(soup.find_all("div", class_="byline"))
-        author_candidates.extend(soup.find_all("span", class_="byline__author-name"))
+        author_candidates.extend(soup.find_all("span",
+            class_="byline__author-name"))
         #print(author_candidates)
         if author_candidates:
             dictionary["author"] = author_candidates[0].get_text()
@@ -91,8 +95,8 @@ def get_date(dictionary, url=""):
             date = dateparser.parse(date_str)
         if not date:
             # dateparser does not like dates that look like
-            # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
-            # and try again
+            # '2011-05-26T13:11:14.000Z', so we shave off the last few
+            # characters and try again
             date = dateparser.parse(date_str[:-5])
         if not date:
             return date_str
