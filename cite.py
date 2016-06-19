@@ -1,12 +1,13 @@
 #!/usr/bin/python3
 
 import sys
-from bs4 import BeautifulSoup
 import re
-from tld import get_tld
 import datetime
-import dateparser
 from dateutil.parser import parse
+
+from bs4 import BeautifulSoup
+from tld import get_tld
+import dateparser
 
 def soup2dict(soup, dictionary):
     """
