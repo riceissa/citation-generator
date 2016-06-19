@@ -70,6 +70,7 @@ def soup2dict(soup, dictionary):
             class_="author-card__details__name"))
         author_candidates.extend(soup.find_all("p", class_="author"))
         author_candidates.extend(soup.find_all("p", class_="byline"))
+        author_candidates.extend(soup.find_all("span", class_="byline"))
         author_candidates.extend(soup.find_all("div", class_="byline"))
         author_candidates.extend(soup.find_all("span",
             class_="byline__author-name"))
