@@ -30,7 +30,7 @@ def soup2dict(soup, dictionary):
     m = re.search(r'By (\w* \w*)', s)
     if "author" not in dictionary and m is not None:
         dictionary["author"] = m.group(1)
-    m = re.search(r'(January|February|March|May|June|July|August|September|October|November|December) \d+, \d+', s)
+    m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December) \d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s)
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
