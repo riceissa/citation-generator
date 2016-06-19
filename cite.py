@@ -77,7 +77,7 @@ def get_author(dictionary):
         result = result.replace("\n", "")
         return result
 
-def get_date(dictionary):
+def get_date(dictionary, url=""):
     if "date" in dictionary:
         date_str = dictionary.get("date").strip()
         try:
@@ -94,6 +94,14 @@ def get_date(dictionary):
             date = dateparser.parse(date_str[:-5])
         if not date:
             return date_str
+        return date.strftime("%B %-d, %Y")
+    if url:
+        m = re.search(r'(\d{4}/\d\d?/\d\d?|\d{4}-\d\d?-\d\d?)', url)
+        date_str = m.group(1)
+        try:
+            date = parse(date_str)
+        except ValueError:
+            date = ""
         return date.strftime("%B %-d, %Y")
 
 def get_title(dictionary):
@@ -124,6 +132,7 @@ publisher_map = {
         "econlog.econlib.org": "EconLog",
         "press.princeton.edu": "Princeton University Press",
         "princeton.edu": "Princeton University",
+        "usatoday.com": "USA Today",
     }
 
 def get_publisher(dictionary, url):
@@ -139,7 +148,7 @@ def get_cite_web(dictionary, url=""):
     result = "<ref>{{cite web "
     result += "|url=" + url + " "
     author = get_author(dictionary)
-    date = get_date(dictionary)
+    date = get_date(dictionary, url)
     title = get_title(dictionary)
     publisher = get_publisher(dictionary, url)
     if publisher and title.endswith(" - " + publisher):
