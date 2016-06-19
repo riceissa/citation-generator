@@ -161,4 +161,4 @@ if __name__ == "__main__":
     soup = BeautifulSoup(sys.stdin, "html.parser")
     d = dict()
     soup2dict(soup, d)
-    print(get_cite_web(d, sys.argv[1]))
+    print(get_cite_web(d, sys.argv[1]), end="")
