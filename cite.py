@@ -40,13 +40,12 @@ def soup2dict(soup, dictionary):
     s = soup.get_text()
 
     if "date" not in dictionary:
-        print("got here")
         date_candidates = []
         date_candidates.extend(soup.find_all("div", class_="date"))
         date_candidates.extend(soup.find_all("div", class_="dateline"))
         date_candidates.extend(soup.find_all("span", class_="date"))
         date_candidates.extend(soup.find_all("p", class_="date"))
-        print(date_candidates)
+        #print(date_candidates)
         if date_candidates:
             dictionary["date"] = date_candidates[0].get_text()
 
@@ -77,7 +76,10 @@ def get_author(dictionary):
 def get_date(dictionary):
     if "date" in dictionary:
         date_str = dictionary.get("date").strip()
-        date = parse(date_str)
+        try:
+            date = parse(date_str)
+        except ValueError:
+            date = ""
         if not date:
             # try parsing the date with a different library
             date = dateparser.parse(date_str)
