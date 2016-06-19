@@ -29,23 +29,24 @@ def soup2dict(soup, dictionary):
     m = re.search(r'By (\w* \w*)', s)
     if "author" not in dictionary:
         dictionary["author"] = m.group(1)
+    m = re.search(r'(June) \d+, \d+', s)
+    if "date" not in dictionary:
+        dictionary["date"] = m.group(0)
 
 def get_author(dictionary):
-    return "hi"
+    return dictionary.get("author")
 
 def get_date(dictionary):
-    pass
+    return dictionary.get("date")
 
 def get_title(dictionary):
-    pass
+    return dictionary.get("title")
 
-
-
-def get_cite_web(soup, url=""):
+def get_cite_web(dictionary, url=""):
     result = "{{cite web "
     result += "|url=" + url + " "
-    date = get_date(soup)
-    title = get_title(soup)
+    date = get_date(dictionary)
+    title = get_title(dictionary)
     if date:
         result += "|date=" + date + " "
     if title:
@@ -58,5 +59,4 @@ if __name__ == "__main__":
     soup = BeautifulSoup(sys.stdin, "html.parser")
     d = dict()
     soup2dict(soup, d)
-    print(d)
-    print(sys.argv[1])
+    print(get_cite_web(d, sys.argv[1]))
