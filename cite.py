@@ -23,6 +23,10 @@ def soup2dict(soup, dictionary):
             dictionary["date"] = tag.get("content").strip()
         elif tag.get("name") == "cre":
             dictionary["publisher"] = tag.get("content").strip()
+        elif tag.get("property") == "article:modified_time":
+            dictionary["date"] = tag.get("content").strip()
+        elif tag.get("property") == "article:published_time":
+            dictionary["date"] = tag.get("content").strip()
     if "title" not in dictionary and soup.title is not None:
         dictionary["title"] = soup.title.string.strip()
     #print(soup.find_all("span", class_="author")[0].contents)
@@ -31,9 +35,17 @@ def soup2dict(soup, dictionary):
     m = re.search(r'By (\w* \w*)', s)
     if "author" not in dictionary and m is not None:
         dictionary["author"] = m.group(1)
+
     m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December) \d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s)
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
+
+    if "author" not in dictionary:
+        author_candidates = []
+        author_candidates.extend(soup.find_all("div", class_="author"))
+        author_candidates.extend(soup.find_all("span", class_="author"))
+        if author_candidates:
+            dictionary["author"] = author_candidates[0].get_text()
 
 def get_author(dictionary):
     return dictionary.get("author")
@@ -73,9 +85,12 @@ def get_publisher(dictionary, url):
 def get_cite_web(dictionary, url=""):
     result = "<ref>{{cite web "
     result += "|url=" + url + " "
+    author = get_author(dictionary)
     date = get_date(dictionary)
     title = get_title(dictionary)
     publisher = get_publisher(dictionary, url)
+    if author:
+        result += "|author=" + author + " "
     if date:
         result += "|date=" + date + " "
     if title:
@@ -92,3 +107,4 @@ if __name__ == "__main__":
     d = dict()
     soup2dict(soup, d)
     print(get_cite_web(d, sys.argv[1]))
+    print(d)
