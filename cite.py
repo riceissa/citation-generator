@@ -114,9 +114,9 @@ def get_title(dictionary):
         return dictionary.get("title").strip().replace("|", "-")
 
 publisher_map = {
-        "huffingtonpost.com": "The Huffington Post",
-        "lesswrong.com": "LessWrong",
-        "nytimes.com": "The New York Times",
+        "huffingtonpost.com": "''[[The Huffington Post]]''",
+        "lesswrong.com": "''[[LessWrong]]''",
+        "nytimes.com": "''[[The New York Times]]''",
         "huffingtonpost.ca": "Huffington Post Canada",
         "washingtonpost.com": "The Washington Post",
         "indiatimes.com": "The Times of India",
