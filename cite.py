@@ -21,6 +21,9 @@ def soup2dict(soup, dictionary):
             dictionary["title"] = tag.get("content")
         elif tag.get("name") == "author":
             dictionary["author"] = tag.get("content")
+        elif tag.get("name") == "article:author_name" and ("author" not in
+                dictionary):
+            dictionary["author"] = tag.get("content")
         elif tag.get("name") == "DCSext.author":
             dictionary["author"] = tag.get("content")
         elif tag.get("name") == "dat":
