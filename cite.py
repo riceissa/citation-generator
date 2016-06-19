@@ -104,10 +104,14 @@ publisher_map = {
         "nybooks.com": "The New York Review of Books",
         "who.int": "World Health Organization",
         "givewell.org": "GiveWell",
+        "press.princeton.edu": "Princeton University Press",
     }
 
 def get_publisher(dictionary, url):
-    if get_tld(url) in publisher_map:
+    domain = get_tld(url, as_object=True)
+    if str(domain.subdomain) + "." + str(domain) in publisher_map:
+        return publisher_map[str(domain.subdomain) + "." + str(domain)]
+    if str(domain) in publisher_map:
         return publisher_map[get_tld(url)]
     elif "publisher" in dictionary:
         return dictionary.get("publisher").strip()
