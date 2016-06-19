@@ -4,6 +4,7 @@ import sys
 from bs4 import BeautifulSoup
 import re
 from tld import get_tld
+import datetime
 
 def soup2dict(soup, dictionary):
     """
@@ -81,6 +82,7 @@ def get_cite_web(dictionary, url=""):
         result += "|title=" + title + " "
     if publisher:
         result += "|publisher=" + publisher + " "
+    result += "|accessdate=" + datetime.date.today().strftime("%B %d, %Y")
     result = result.strip()
     result += "}}</ref>"
     return result
