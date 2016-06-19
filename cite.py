@@ -49,7 +49,8 @@ def soup2dict(soup, dictionary):
         if date_candidates:
             dictionary["date"] = date_candidates[0].get_text()
 
-    m = re.search(r'((January|February|March|May|June|July|August|September|October|November|December)  ?\d+, \d+|\d+ (January|February|March|May|June|July|August|September|October|November|December) \d+)', s, re.IGNORECASE)
+    months = "(Jan(uary)?|Feb(ruary)?|Mar(ch)?|May|June?|July?|Aug(ust)?|Sept?(ember)?|Oct(ober)?|Nov(ember)?|Dec(ember)?)"
+    m = re.search(r'({months}\.?  ?\d+, \d+|\d+ {months} \d+)'.format(months=months), s, re.IGNORECASE)
     if "date" not in dictionary and m is not None:
         dictionary["date"] = m.group(0)
 
