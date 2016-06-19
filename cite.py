@@ -74,7 +74,7 @@ def get_date(dictionary):
             # dateparser does not like dates that look like
             # '2011-05-26T13:11:14.000Z', so we shave off the last few characters
             # and try again
-            date = dateparser.parse(date_str[:4])
+            date = dateparser.parse(date_str[:-5])
         if not date:
             return date_str
         return date.strftime("%B %-d, %Y")
@@ -105,6 +105,7 @@ publisher_map = {
         "who.int": "World Health Organization",
         "givewell.org": "GiveWell",
         "press.princeton.edu": "Princeton University Press",
+        "princeton.edu": "Princeton University",
     }
 
 def get_publisher(dictionary, url):
@@ -123,6 +124,8 @@ def get_cite_web(dictionary, url=""):
     date = get_date(dictionary)
     title = get_title(dictionary)
     publisher = get_publisher(dictionary, url)
+    if title.endswith(" - " + publisher):
+        title = title[:-len(" - " + publisher)]
     if author:
         result += "|author=" + author + " "
     if date:
