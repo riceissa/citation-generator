@@ -8,3 +8,10 @@ $ ./cite.sh 'http://www.nytimes.com/2014/04/26/your-money/giving-away-money-and-
 ```
 
 Inspired by [RefScript](https://en.wikipedia.org/wiki/User:Ark25/RefScript).
+
+# TODO
+
+Here I'll keep a list of things I need to improve, which will mostly be a list of websites for which the script doesn't work very well.
+
+- Fix `cite.sh` so it doesn't depend on the directory where you call it from/where `cite.py` is stored.
+- Doesn't work very well on <http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2205967/>.
