@@ -17,7 +17,7 @@ def soup2dict(soup, dictionary, url=""):
     domain = get_tld(url)
     meta = soup.find_all("meta")
     for tag in meta:
-        if tag.get("property") == "og:title":
+        if tag.get("property") == "og:title" and tag.get("content"):
             dictionary["title"] = tag.get("content")
         elif tag.get("name") == "title":
             dictionary["title"] = tag.get("content")
@@ -124,7 +124,7 @@ def get_date(dictionary, url=""):
         return date.strftime("%B %-d, %Y")
 
 def get_title(dictionary):
-    if "title" in dictionary:
+    if "title" in dictionary and dictionary.get("title"):
         return dictionary.get("title").strip().replace("|", "-")
 
 publisher_map = {
