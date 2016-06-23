@@ -138,13 +138,13 @@ publisher_map = {
         "indiatimes.com": "The Times of India",
         "bostonglobe.com": "The Boston Globe",
         "mirror.co.uk": "Mirror",
-        "telegraph.co.uk": "The Telegraph",
+        "telegraph.co.uk": "''[[The Telegraph]]''",
         "bloomberg.com": "Businessweek",
         "ft.com": "Financial Times",
         "economist.com": "The Economist",
         "arstechnica.com": "Ars Technica",
         "wsj.com": "The Wall Street Journal",
-        "theguardian.com": "The Guardian",
+        "theguardian.com": "''[[The Guardian]]''",
         "independent.co.uk": "The Independent",
         "theregister.co.uk": "The Register",
         "nybooks.com": "The New York Review of Books",
@@ -155,6 +155,7 @@ publisher_map = {
         "princeton.edu": "Princeton University",
         "usatoday.com": "USA Today",
         "latimes.com": "''[[Los Angeles Times]]''",
+        ".plos.org": "[[PLOS]]",
     }
 
 def get_publisher(dictionary, url):
