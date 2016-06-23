@@ -34,6 +34,8 @@ def soup2dict(soup, dictionary, url=""):
             dictionary["publisher"] = tag.get("content")
         elif tag.get("name") == "cre":
             dictionary["publisher"] = tag.get("content")
+        elif tag.get("name") == "dcterms.date":
+            dictionary["date"] = tag.get("content")
         elif tag.get("property") == "article:published_time":
             dictionary["date"] = tag.get("content")
         elif tag.get("property") == "article:modified_time" and ("date" not in
