@@ -156,6 +156,7 @@ publisher_map = {
         "usatoday.com": "USA Today",
         "latimes.com": "''[[Los Angeles Times]]''",
         ".plos.org": "[[PLOS]]",
+        "theatlantic.com": "''[[The Atlantic]]''",
     }
 
 def get_publisher(dictionary, url):
