@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import argparse
+import logging
 import sys
 import re
 import datetime
@@ -13,6 +14,7 @@ import dateparser
 def main():
     parser = argparse.ArgumentParser(description=("Generate a citation from " +
         "an HTML file"))
+    parser.add_argument("url", type=str, help="the URL")
     parser.add_argument("-f", "--format", type=str,
             help=("output format; accepted values are 'none', 'html', " +
             "'markdown', 'tex', 'latex', 'mediawiki'"))
@@ -26,6 +28,11 @@ def main():
         dest="log_level", const=logging.DEBUG, help="enable debug messages")
     args = parser.parse_args()
     logging.basicConfig(level=args.log_level)
+    soup = BeautifulSoup(sys.stdin, "html.parser")
+    d = dict()
+    url = args.url
+    soup2dict(soup, d, url)
+    print(get_markdown_citation(d, url), end="")
 
 def soup2dict(soup, dictionary, url=""):
     """
@@ -256,8 +263,4 @@ def get_mediawiki_citation(dictionary, url=""):
     return result
 
 if __name__ == "__main__":
-    # soup = BeautifulSoup(sys.stdin, "html.parser")
-    # d = dict()
-    # soup2dict(soup, d, sys.argv[1])
-    # print(get_cite_web(d, sys.argv[1]), end="")
     main()
