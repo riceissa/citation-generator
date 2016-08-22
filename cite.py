@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import argparse
 import sys
 import re
 import datetime
@@ -8,6 +9,22 @@ from dateutil.parser import parse
 from bs4 import BeautifulSoup
 from tld import get_tld
 import dateparser
+
+def main():
+    parser = argparse.ArgumentParser(description=("Generate a citation from " +
+        "an HTML file"))
+    parser.add_argument("-f", "--format", type=str,
+            help=("output format; accepted values are 'none', 'html', " +
+            "'markdown', 'tex', 'latex', 'mediawiki'"))
+    parser.add_argument("-c", "--clean", action="store_true",
+            help=("clean the title to remove the site name " +
+    parser.add_argument("-H", "--heuristic", action="store_true",
+            help=("use various heuristics to try to obtain some metadata " +
+            "even when not explictly defined in the document"))
+    parser.add_argument("-v", "--verbose", action="store_const",
+        dest="log_level", const=logging.DEBUG, help="enable debug messages")
+    args = parser.parse_args()
+    logging.basicConfig(level=args.log_level)
 
 def soup2dict(soup, dictionary, url=""):
     """
@@ -169,6 +186,43 @@ def get_publisher(dictionary, url):
     elif "publisher" in dictionary:
         return dictionary.get("publisher").strip()
 
+def get_markdown_citation(dictionary, url=""):
+    # From http://pandoc.org/README.html#backslash-escapes
+    # There is also the hyphen, "-", but I've removed that since
+    # escaping it just prevents em- and en-dashes from forming (and
+    # in most cases, this is what one wants)
+    special_chars = "\\`*_{}[]()>#+.!"
+    result = ""
+    link_text = dictionary["title"]
+    for c in link_text:
+        if c in special_chars:
+            result += "\\" + c
+        else:
+            result += c
+    date = get_date(dictionary, url)
+    title = "“" + dictionary["title"] + "”"
+    cite_info = ". ".join([dictionary["author"], title,
+        dictionary["publisher"], date])
+    if cite_info:
+        cite_info = ' "' + cite_info.strip() + '."'
+    return '["{link_text}"]({url}{cite_info})'.format(link_text=result, url=url,
+            cite_info=cite_info)
+
+def get_markdown_hyperlink(dictionary, url=""):
+    # From http://pandoc.org/README.html#backslash-escapes
+    # There is also the hyphen, "-", but I've removed that since
+    # escaping it just prevents em- and en-dashes from forming (and
+    # in most cases, this is what one wants)
+    special_chars = "\\`*_{}[]()>#+.!"
+    result = ""
+    link_text = dictionary["title"]
+    for c in link_text:
+        if c in special_chars:
+            result += "\\" + c
+        else:
+            result += c
+    return "[{link_text}]({url})".format(link_text=result, url=url)
+
 def get_cite_web(dictionary, url=""):
     result = "<ref>{{cite web "
     result += "|url=" + url + " "
@@ -192,7 +246,8 @@ def get_cite_web(dictionary, url=""):
     return result
 
 if __name__ == "__main__":
-    soup = BeautifulSoup(sys.stdin, "html.parser")
-    d = dict()
-    soup2dict(soup, d, sys.argv[1])
-    print(get_cite_web(d, sys.argv[1]), end="")
+    # soup = BeautifulSoup(sys.stdin, "html.parser")
+    # d = dict()
+    # soup2dict(soup, d, sys.argv[1])
+    # print(get_cite_web(d, sys.argv[1]), end="")
+    main()
