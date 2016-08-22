@@ -187,7 +187,7 @@ def get_publisher(dictionary, url):
     elif "publisher" in dictionary:
         return dictionary.get("publisher").strip()
 
-def get_markdown_citation(dictionary, url=""):
+def get_markdown_citation(dictionary, url="", reference_style=False):
     # From http://pandoc.org/README.html#backslash-escapes
     # There is also the hyphen, "-", but I've removed that since
     # escaping it just prevents em- and en-dashes from forming (and
@@ -212,8 +212,11 @@ def get_markdown_citation(dictionary, url=""):
         cite_info += date + ". "
     if cite_info:
         cite_info = ' "' + cite_info.strip() + '"'
-    return '["{link_text}"]({url}{cite_info})'.format(link_text=result, url=url,
-            cite_info=cite_info)
+    if reference_style:
+        base = '["{link_text}"][]\n\n[]: {url}{cite_info}'
+    else:
+        base = '["{link_text}"]({url}{cite_info})'
+    return base.format(link_text=result, url=url, cite_info=cite_info)
 
 def get_markdown_hyperlink(dictionary, url=""):
     # From http://pandoc.org/README.html#backslash-escapes
