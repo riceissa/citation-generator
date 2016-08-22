@@ -18,6 +18,7 @@ def main():
             "'markdown', 'tex', 'latex', 'mediawiki'"))
     parser.add_argument("-c", "--clean", action="store_true",
             help=("clean the title to remove the site name " +
+            "if the title was obtained from an HTML title tag"))
     parser.add_argument("-H", "--heuristic", action="store_true",
             help=("use various heuristics to try to obtain some metadata " +
             "even when not explictly defined in the document"))
@@ -199,12 +200,18 @@ def get_markdown_citation(dictionary, url=""):
             result += "\\" + c
         else:
             result += c
-    date = get_date(dictionary, url)
-    title = "“" + dictionary["title"] + "”"
-    cite_info = ". ".join([dictionary["author"], title,
-        dictionary["publisher"], date])
+    cite_info = ""
+    if "author" in dictionary:
+        cite_info += dictionary["author"] + ". "
+    if "title" in dictionary:
+        cite_info += "“" + dictionary["title"] + "”" + ". "
+    if "publisher" in dictionary:
+        cite_info +=  dictionary["publisher"] + ". "
+    if "date" in dictionary:
+        date = get_date(dictionary, url)
+        cite_info += date + ". "
     if cite_info:
-        cite_info = ' "' + cite_info.strip() + '."'
+        cite_info = ' "' + cite_info.strip() + '"'
     return '["{link_text}"]({url}{cite_info})'.format(link_text=result, url=url,
             cite_info=cite_info)
 
@@ -223,7 +230,7 @@ def get_markdown_hyperlink(dictionary, url=""):
             result += c
     return "[{link_text}]({url})".format(link_text=result, url=url)
 
-def get_cite_web(dictionary, url=""):
+def get_mediawiki_citation(dictionary, url=""):
     result = "<ref>{{cite web "
     result += "|url=" + url + " "
     author = get_author(dictionary)
