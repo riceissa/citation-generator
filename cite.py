@@ -114,6 +114,31 @@ def soup2dict(soup, dictionary, url=""):
     if "author" not in dictionary and m is not None:
         dictionary["author"] = m.group(1)
 
+def messy_title_parse(title, url=None):
+    # Even if nothing works, at least we'll have a whitespace-sanitized
+    # title
+    logging.debug("Cleaning messy title")
+    result = title.strip()
+    hyphen_split = result.split(" - ")
+    bar_split = result.split(" | ")
+    em_dash_split = result.split(" — ")
+    colon_split = result.split(": ")
+    if get_tld(url) in ["autoadmit.com", "xoxohth.com"]:
+        return " - ".join(hyphen_split[1:])
+    if len(hyphen_split) > 1:
+        # So there is actually more than one part, so we just take the
+        # first and we're done.  This is for titles like "Post Title -
+        # Site Name"
+        result = hyphen_split[0]
+    elif len(em_dash_split) > 1:
+        result = em_dash_split[0]
+    elif len(bar_split) > 1:
+        result = bar_split[0]
+    elif len(colon_split) > 1:
+        # For titles like "Site Name: Post Title"
+        result = colon_split[-1]
+    return result
+
 def get_author(dictionary):
     if "author" in dictionary:
         result = dictionary.get("author").strip()
